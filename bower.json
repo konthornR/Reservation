@@ -2,6 +2,7 @@
   "name": "Reservation",
   "version": "0.0.1",
   "dependencies": {
+	"angular": "latest",
    	"qrcode": "latest",
    	"angular-qr": "latest"
   }
