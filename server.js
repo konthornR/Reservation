@@ -5,6 +5,11 @@ var express = require('express'),
 
 http.listen(3000);
 
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/public/index.html');
+});
+
+
 var _ = require('underscore');
 
 var customer_format = 	{
