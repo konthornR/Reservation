@@ -3,7 +3,7 @@ var express = require('express'),
     http = require('http').createServer(app),
     io = require('socket.io').listen(http);
 
-http.listen(3000);
+http.listen(process.env.PORT || 3000)
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
