@@ -1,7 +1,8 @@
 var app = angular.module('reservationApp', ['ja.qr']);
 
 app.factory('socket', function(){
-    return io.connect('http://localhost:3000');
+    //return io.connect('http://localhost:3000');
+    return io.connect('https://murmuring-fjord-5701.herokuapp.com/');
 });
 
 app.controller('tableQueueControl', function($scope, socket){
