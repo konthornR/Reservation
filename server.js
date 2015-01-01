@@ -140,7 +140,7 @@ io.sockets.on('connection', function(socket){
 					customer.SocketId.push(data.SocketId);
 					foundCustomer = true;
 					thisCustomer = _.clone(customer);
-					thisCustomer.QueueNumber = customerIdx;
+					thisCustomer.QueueNumber = customerIdx+1;
 					return;
 				}
 			});
