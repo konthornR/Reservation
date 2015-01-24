@@ -176,6 +176,11 @@ io.sockets.on('connection', function(socket){
 
 	});
 
+	//Test Connection
+	socket.on('test connection', function(data){	
+		io.sockets.emit('test connection back', data); 
+	});
+
 });
 
 
