@@ -45,6 +45,8 @@ var callingQueue = [];
 
 
 io.sockets.on('connection', function(socket){
+	//console.log("-------- Customer connect with id = "+ socket.id);
+	io.sockets.socket(socket.id).emit("socket id connection", {'SocketId': socket.id});
 
 	socket.on('request reserve seats', function(data){		
 		var customer = _.clone(customer_format);
