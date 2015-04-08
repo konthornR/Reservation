@@ -19,17 +19,31 @@ app.controller('tableQueueControl', function($scope, socket){
     $scope.nextQueue = function(customer){
         socket.emit('next queue', customer);
     };
+
+    $scope.attend = function(customer){
+        socket.emit('customer attend', customer);
+    };
+
+    $scope.notAttend = function(customer){
+        socket.emit('customer does not attend', customer);
+    };
+
+    //Initial Table
+    socket.emit('request initial table');
 });
 
 app.controller('reserveQueueControl', function($scope, socket){
     $scope.qrCodeString = "TEST";
     $scope.reserveSeats = function() {
         var Id = generateUniqueId();
-        socket.emit('request reserve seats', {'Name': $scope.customer.Name, 'NumberOfSeats': $scope.customer.NumberOfSeats, 'Id': Id});
-        $scope.customer.Name = "";
-        $scope.customer.NumberOfSeats = "";
-        //update_qrcode(Id);
-        $scope.qrCodeString = Id;
+        if($scope.customer && $scope.customer.Name != "" && IsNumeric($scope.customer.NumberOfSeats)){
+            socket.emit('request reserve seats', {'Name': $scope.customer.Name, 'NumberOfSeats': $scope.customer.NumberOfSeats, 'Id': Id});
+            $scope.customer.Name = "";
+            $scope.customer.NumberOfSeats = "";
+            $scope.qrCodeString = Id;
+        }else{
+            alert("Wrong Input Format: Name can not be empty and Number of Seats must be numeric");
+        }        
     };
 
     var generateUniqueId = function() {
@@ -38,4 +52,8 @@ app.controller('reserveQueueControl', function($scope, socket){
                 return v.toString(16);
             });
     };
+
+    var IsNumeric = function(num) {
+        return (num >=0 || num < 0);
+    }
 });

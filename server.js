@@ -12,6 +12,14 @@ app.get('/', function (req, res) {
 
 var _ = require('underscore');
 
+var mysql = require('mysql');
+var pool = mysql.createPool({
+  host     : 'us-cdbr-iron-east-02.cleardb.net',
+  user     : 'b74609e180ce2b',
+  password : '87b88840',
+  database : 'heroku_ec961a3d2debbe8'
+});
+
 var customer_format = 	{
 					'Name': '',
 					'NumberOfSeats': 0,
@@ -43,7 +51,6 @@ var tableConfig = 	[{
 
 var callingQueue = [];
 
-
 io.sockets.on('connection', function(socket){
 	//console.log("-------- Customer connect with id = "+ socket.id);
 	io.sockets.socket(socket.id).emit("socket id connection", {'SocketId': socket.id});
@@ -55,6 +62,25 @@ io.sockets.on('connection', function(socket){
 		customer.Id = data.Id;
 		customer.SocketId = _.clone(customer_format.SocketId);
 
+		//Add customer into database
+		var start = new Date();
+		var start_sqlFormat = start.getFullYear() + "-" + (start.getMonth()+1) + "-" + start.getDate() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds();
+		var post  = {
+			qrcode: data.Id, 
+			timestart: start_sqlFormat,		 
+			name: data.Name,
+			numseat: data.NumberOfSeats
+		};
+		pool.getConnection(function(err, connection){
+			var query = connection.query('INSERT INTO reservation SET ?', post, function(err, result) {
+			  	if (err) { 
+			        throw err;
+		      	}
+			});
+			connection.release();
+		});
+
+		
 		//Add customer in tableConfig
 		for(var i =0; i<tableConfig.length; i++){
 			if(customer.NumberOfSeats >= tableConfig[i].greater && customer.NumberOfSeats <= tableConfig[i].less){
@@ -130,6 +156,22 @@ io.sockets.on('connection', function(socket){
 			
 			currentQueueCustomer.NextQueueFlag = false;
 			callingQueue.push(currentQueueCustomer);
+
+			//Update end Timestamp for currentQueueCustomer into database
+			var end = new Date();
+			var end_sqlFormat = end.getFullYear() + "-" + (end.getMonth()+1) + "-" + end.getDate() + " " + end.getHours() + ":" + end.getMinutes() + ":" + end.getSeconds();
+			var post  = {
+				timeend: end_sqlFormat
+			};
+			pool.getConnection(function(err, connection){
+				var query = connection.query('UPDATE reservation SET ? WHERE qrcode = ?', [post, currentQueueCustomer.Id], function(err, result){
+					if (err) { 
+				        throw err;
+			      	}  
+				});
+				connection.release();
+  			});
+
 			//update Table information
 			io.sockets.emit('update table', allCustomers); 
 			io.sockets.emit('update calling table', callingQueue); 
@@ -178,13 +220,66 @@ io.sockets.on('connection', function(socket){
 
 	});
 
+	//Customer does attend 
+	socket.on('customer attend', function(data){	
+		// Find data customer index in calling Queue array
+		var customerIndex_IncallingQueue;
+		_.each(callingQueue, function(customer, idx) { 
+		   if (customer.Id == data.Id) {
+		      customerIndex_IncallingQueue = idx;
+		      return;
+		   }
+		 });
+
+		var post  = {
+				doesattend: "true"
+			};
+		pool.getConnection(function(err, connection){
+			var query = connection.query('UPDATE reservation SET ? WHERE qrcode = ?', [post, data.Id], function(err, result){
+				if (err) { 
+			        throw err;
+		      	}  
+			});
+			connection.release();
+		});
+
+		//Romove this customers in calling queue
+		callingQueue.splice(customerIndex_IncallingQueue,1);
+
+		io.sockets.emit('update table', allCustomers); 
+		io.sockets.emit('update calling table', callingQueue); 
+	});
+
+	//Customer doesn't attend 
+	socket.on('customer does not attend', function(data){	
+		// Find data customer index in calling Queue array
+		var customerIndex_IncallingQueue;
+		_.each(callingQueue, function(customer, idx) { 
+		   if (customer.Id == data.Id) {
+		      customerIndex_IncallingQueue = idx;
+		      return;
+		   }
+		 });
+
+		//Romove this customers in calling queue
+		callingQueue.splice(customerIndex_IncallingQueue,1);
+
+		io.sockets.emit('update table', allCustomers); 
+		io.sockets.emit('update calling table', callingQueue); 
+	});
+
+	//Send Initial Table
+	socket.on('request initial table', function(data){	
+		io.sockets.emit('update table', allCustomers); 
+		io.sockets.emit('update calling table', callingQueue); 
+	});
+
 	//Test Connection
 	socket.on('test connection', function(data){	
 		io.sockets.emit('test connection back', data); 
 	});
 
 });
-
 
 
 app.use(express.static(__dirname+'/public'));

@@ -16,7 +16,9 @@
         <table>
           <tr ng-repeat="customer in listCustomersCalling">
             <td>{{ customer.Name }}</td>
-            <td>{{ customer.NumberOfSeats }}</td>           
+            <td>{{ customer.NumberOfSeats }}</td>        
+            <td><button ng-click="attend(customer)">Attend</button></td>   
+            <td><button ng-click="notAttend(customer)">Not Attend</button></td>  
           </tr>
         </table>
         <br><br>
