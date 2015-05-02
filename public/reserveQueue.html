@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="reservationApp">
+<head>
+    <title>Reserve Queue</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="angular/angular.js"></script>
+    <script type="text/javascript" src="qrcode/lib/qrcode.min.js"></script>     
+    <script type="text/javascript" src="angular-qr/angular-qr.min.js"></script> <!--https://github.com/janantala/angular-qr-->
+    <script src="main.js"></script>
+</head>
+<body>
+    <h1>Reserve Queue</h1>
+    
+    <div ng-controller="reserveQueueControl">
+        <br><br>
+        <form novalidate>
+            Name:<br>
+                <input type="text" ng-model="customer.Name"><br>
+            Number of Seats:<br>
+                <input type="text" ng-model="customer.NumberOfSeats">
+            <br><br>
+            <button ng-click="reserveSeats()">Reserve</button>
+        </form>
+        <br><br>
+        <div>Generate code: {{ qrCodeString }}</div>
+        <qr type-number="8" correction-level="'M'" size="200" text="qrCodeString" image="true"></qr>
+    </div>
+
+</body>
+</html>

@@ -9,6 +9,14 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
 
+app.get('/QueueLists', function (req, res) {
+  res.sendfile(__dirname + '/public/queueLists.html');
+});
+
+app.get('/ReserveQueue', function (req, res) {
+  res.sendfile(__dirname + '/public/reserveQueue.html');
+});
+
 
 var _ = require('underscore');
 
@@ -189,7 +197,7 @@ io.sockets.on('connection', function(socket){
 					customer.SocketId.push(data.SocketId);
 					foundCustomer = true;
 					thisCustomer = _.clone(customer);
-					thisCustomer.QueueNumber = customerIdx+1;
+					thisCustomer.QueueNumber = customerIdx+1;				
 					return;
 				}
 			});
@@ -213,11 +221,42 @@ io.sockets.on('connection', function(socket){
 						io.sockets.socket(socketId).emit("customer information", thisCustomer);	
 					}
 			});		
+
+			var post  = {
+							doesusemobile: 'true'
+						};
+			pool.getConnection(function(err, connection){
+				var query = connection.query('UPDATE reservation SET ? WHERE qrcode = ?', [post, data.Id], function(err, result){
+					if (err) { 
+				        throw err;
+			      	}  
+				});
+				connection.release();
+  			});
 		}		
 		//update Table information
 		io.sockets.emit('update table', allCustomers); 
 		io.sockets.emit('update calling table', callingQueue); 
 
+	});
+
+	//Find Customer in Next Queue
+	socket.on('request customer in next queue', function(data){
+		if(data.customerType){
+			//Current this server have only 0,1,2,3 customer type
+			if(data.customerType > 3){
+				data.customerType = 3; 
+			}
+			if(tableConfig[data.customerType].customers.length > 0){
+				requestNextCustomer = tableConfig[data.customerType].customers[0]
+				io.sockets.emit('respond customer in next queue', requestNextCustomer);
+			}else{
+				io.sockets.emit('respond customer in next queue', "no more customer waiting in this customer group type");
+			}
+		}else{
+			io.sockets.emit('respond customer in next queue', "require customerType parameter");
+		}	
+		 
 	});
 
 	//Customer does attend 
