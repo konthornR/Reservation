@@ -6,6 +6,12 @@ app.factory('socket', function(){
 });
 
 app.controller('tableQueueControl', function($scope, socket){
+    $scope.selectedCustomer = {
+                                Id : "",
+                                Name : "",
+                                QueuePosition : 0,
+                                NumberOfSeats : 0
+                            };
 
     socket.on('update table', function(data) {
         $scope.listCustomersQueue = data;
@@ -27,6 +33,10 @@ app.controller('tableQueueControl', function($scope, socket){
     $scope.notAttend = function(customer){
         socket.emit('customer does not attend', customer);
     };
+
+    $scope.selectCustomer = function(customer) {
+        $scope.selectedCustomer = customer;
+    }
 
     //Initial Table
     socket.emit('request initial table');

@@ -10,16 +10,38 @@
     <script src="main.js"></script>
 </head>
 <body>
+    
+    <img height = "60"  src="logo.png" >
     <h1>Queue Lists</h1>
     <div ng-controller="tableQueueControl"> 
-        <table>
-          <tr ng-repeat="customer in listCustomersQueue">
-            <td>{{ customer.Id }}</td>
-            <td>{{ customer.SocketId.join() }}</td>
-            <td>{{ customer.Name }}</td>
-            <td>{{ customer.NumberOfSeats }}</td>           
-          </tr>
-        </table>
+        <div class= "queue-list">
+            <table>
+                <col width="100">
+                <col width="200">
+                <col width="100">
+                <col width="130">
+                <tbody>
+                    <tr>
+                        <th>Queue #</th>
+                        <th>Name</th>
+                        <th>Seats</th>
+                        <th>QR Code</th>
+                    </tr>
+                    <tr ng-repeat="customer in listCustomersQueue">                         
+                            <td><font color="{{customer.GroupColor}}">{{ customer.QueuePosition }}</font></td>                   
+                            <td><font color="{{customer.GroupColor}}">{{ customer.Name }}</font></td>
+                            <td><font color="{{customer.GroupColor}}">{{ customer.NumberOfSeats }}</font></td> 
+                            <td><button ng-click="selectCustomer(customer)"><font color="{{customer.GroupColor}}">Draw QR Code</font></button></td>                            
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style = "float:left">
+            <fieldset>
+                <legend>Queue # {{selectedCustomer.QueuePosition}} , Name = {{selectedCustomer.Name}} , Seats = {{selectedCustomer.NumberOfSeats}}</legend>
+                <qr type-number="8" correction-level="'M'" size="300" text="selectedCustomer.Id" image="true"></qr>
+            </fieldset>
+        </div>
     </div>   
 </body>
 </html>

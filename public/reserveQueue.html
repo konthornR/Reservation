@@ -2,29 +2,37 @@
 <html ng-app="reservationApp">
 <head>
     <title>Reserve Queue</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="style.css"/>
     <script src="socket.io/socket.io.js"></script>
     <script src="angular/angular.js"></script>
     <script type="text/javascript" src="qrcode/lib/qrcode.min.js"></script>     
     <script type="text/javascript" src="angular-qr/angular-qr.min.js"></script> <!--https://github.com/janantala/angular-qr-->
-    <script src="main.js"></script>
+    <script src="main.js"></script>   
+
 </head>
 <body>
-    <h1>Reserve Queue</h1>
-    
-    <div ng-controller="reserveQueueControl">
-        <br><br>
-        <form novalidate>
-            Name:<br>
-                <input type="text" ng-model="customer.Name"><br>
-            Number of Seats:<br>
-                <input type="text" ng-model="customer.NumberOfSeats">
-            <br><br>
-            <button ng-click="reserveSeats()">Reserve</button>
-        </form>
-        <br><br>
-        <div>Generate code: {{ qrCodeString }}</div>
-        <qr type-number="8" correction-level="'M'" size="200" text="qrCodeString" image="true"></qr>
+    <img height = "60" src="logo.png" >       
+    <div ng-controller="reserveQueueControl">        
+        <div>
+            <div class = "reserve-form">
+                <h2>Reserve Queue</h2> 
+                <form novalidate class="pure-form pure-form-stacked">
+                    <label for="name">Name</label>
+                    <input placeholder="Name" type="text" ng-model="customer.Name"><br>
+                    <label for="seats">Number of Seats</label>
+                    <input placeholder="Number of Seats" type="text" ng-model="customer.NumberOfSeats">
+                    <br><br>
+                    <button class="pure-button pure-button-primary" ng-click="reserveSeats()">Reserve</button>
+                </form>
+            </div>
+            <div class = "qr-code">
+                <fieldset>
+                    <legend>QR Code:</legend>
+                    <qr type-number="8" correction-level="'M'" size="250" text="qrCodeString" image="true"></qr>
+                </fieldset>
+            </div>
+        </div>
     </div>
 
 </body>

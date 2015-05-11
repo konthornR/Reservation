@@ -7,10 +7,15 @@
     list-style-type: none;
 }
 
+body {
+  margin-left: 15px;
+}
+
 table, th , td {
   border: 1px solid grey;
   border-collapse: collapse;
   padding: 5px;
+  text-align: left;
 }
 table tr:nth-child(odd) {
   background-color: #f1f1f1;
@@ -18,3 +23,28 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
   background-color: #ffffff;
 }
+
+
+.reserve-form {
+  float: left ;
+  padding-right:200px; 
+}
+
+.qr-code {
+  padding-top: 20px;		
+  float: left ;
+}
+
+.topic-text{
+  color: darkorange;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.queue-list {
+  float: left ;
+  padding-right:50px; 
+}
+
+

@@ -33,28 +33,38 @@ var customer_format = 	{
 					'NumberOfSeats': 0,
 					'Id': '',
 					'SocketId': [],
-					'NextQueueFlag': false
+					'NextQueueFlag': false,
+					'QueuePosition' : 0,
+					'GroupColor' : ""
 				};
 var allCustomers = [];
 var tableConfig = 	[{
 						'greater' : 1,
 						'less' : 3,
-						'customers' : []
+						'customers' : [],
+						'latestQueuePosition' : 0,
+						'groupColor' : "red"
 					},
 					{
 						'greater' : 4,
 						'less' : 6,
-						'customers' : []
+						'customers' : [],
+						'latestQueuePosition' : 0,
+						'groupColor' : "green"						
 					},
 					{
 						'greater' : 7,
 						'less' : 9,
-						'customers' : []
+						'customers' : [],
+						'latestQueuePosition' : 0,
+						'groupColor' : "blue"		
 					},
 					{
 						'greater' : 10,
 						'less' : 100,
-						'customers' : []
+						'customers' : [],
+						'latestQueuePosition' : 0,
+						'groupColor' : "black"		
 					}];
 
 var callingQueue = [];
@@ -96,6 +106,9 @@ io.sockets.on('connection', function(socket){
 				if(tableConfig[i].customers.length == 0){
 					customer.NextQueueFlag = true;
 				}
+				tableConfig[i].latestQueuePosition = tableConfig[i].latestQueuePosition + 1;
+				customer.QueuePosition = tableConfig[i].latestQueuePosition;
+				customer.GroupColor = tableConfig[i].groupColor;
 				tableConfig[i].customers.push(customer);
 				break;
 			}
