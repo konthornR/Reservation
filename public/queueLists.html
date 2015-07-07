@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html ng-app="reservationApp">
 <head>
+    <base href="/">
     <title>Queue Lists</title>
     <link rel="stylesheet" href="style.css"/>
     <script src="socket.io/socket.io.js"></script>
     <script src="angular/angular.js"></script>
+    <!--<script src="angular-ui-router/release/angular-ui-router.min.js"></script>-->
+    <script type="text/javascript" src="angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="qrcode/lib/qrcode.min.js"></script>     
     <script type="text/javascript" src="angular-qr/angular-qr.min.js"></script> <!--https://github.com/janantala/angular-qr-->
     <script src="main.js"></script>
@@ -39,7 +42,7 @@
         <div style = "float:left">
             <fieldset>
                 <legend>Queue # {{selectedCustomer.QueuePosition}} , Name = {{selectedCustomer.Name}} , Seats = {{selectedCustomer.NumberOfSeats}}</legend>
-                <qr type-number="8" correction-level="'M'" size="300" text="selectedCustomer.Id" image="true"></qr>
+                <qr type-number="8" correction-level="'M'" size="300" text="qrCodeString" image="true"></qr>
             </fieldset>
         </div>
     </div>   

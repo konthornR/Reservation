@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="reservationApp">
+<head>
+    <base href="/">
+    <title>Create or Join Company</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="angular/angular.js"></script>
+    <!--<script src="angular-ui-router/release/angular-ui-router.min.js"></script>-->
+    <script type="text/javascript" src="angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="qrcode/lib/qrcode.min.js"></script>     
+    <script type="text/javascript" src="angular-qr/angular-qr.min.js"></script> <!--https://github.com/janantala/angular-qr-->
+    <script src="main.js"></script>
+</head>
+<body>
+    
+    <img height = "60"  src="logo.png" >
+    <h1>Create or Join Company</h1>
+
+    <div ng-controller="createOrJoinCompanyControl"> 
+        <fieldset>
+            <legend>Create Company</legend>
+            <form novalidate class="pure-form pure-form-stacked">
+                <label for="name">Id</label>
+                <input placeholder="Id" type="text" ng-model="newCompany.Id"><br>            
+                <br><br>
+                <button class="pure-button pure-button-primary" ng-click="createCompany()">Create</button>
+            </form>
+        </fieldset>
+        
+        <div class= "queue-list">
+            <table>
+                <col width="300">
+                <tbody>
+                    <tr>
+                        <th>Access ReserveQueue Page</th>  
+                        <th>Access QueueLists Page</th>    
+                        <th>Access NextQueue Page</th>                                 
+                    </tr>
+                    <tr ng-repeat="company in companies"> 
+                        <td><button ng-click="selectReserveQueueCompany(company)">{{company.companyId}}</button></td> 
+                        <td><button ng-click="selectQueueListsCompany(company)">{{company.companyId}}</button></td>    
+                        <td><button ng-click="selectNextQueueCompany(company)">{{company.companyId}}</button></td>                              
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>   
+</body>
+</html>
