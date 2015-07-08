@@ -271,8 +271,16 @@ io.sockets.on('connection', function(socket){;
     });   
 
 	socket.on('customer register code', function(data){	
+		if(socket.companyId){
+    		// leave the current room (stored in session)
+			socket.leave(socket.companyId);
+    	}		
+		// join this room id
+		socket.join(data.CompanyId);
+		socket.companyId = data.CompanyId;
+		
 		thisCompany = globalCompany.getCompanyById(socket.companyId);
-			if(thisCompany){
+		if(thisCompany){
 	    	tableConfig = thisCompany.tableConfig;
 	    	allCustomers = thisCompany.allCustomers;
 	    	callingQueue = thisCompany.callingQueue;
