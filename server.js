@@ -104,7 +104,7 @@ var Company = function(id){
 /*============================   Each Comapany Entity End  =================================*/	
 
 io.sockets.on('connection', function(socket){;
-	//console.log("=================" + socket.id + " connect ========================")
+	console.log("=================" + socket.id + " connect ========================")
 	io.sockets.socket(socket.id).emit("socket id connection", {'SocketId': socket.id});
 
 	/*============================   Global Function Start  =================================*/	
@@ -275,6 +275,14 @@ io.sockets.on('connection', function(socket){;
     		// leave the current room (stored in session)
 			socket.leave(socket.companyId);
     	}		
+    	//Check if data is string or object. If it is String, convert to object
+    	if(typeof data === 'string'){  
+    		try {
+		    	data = JSON.parse(data);
+		    } catch (e) {
+		    	return;
+		    }
+    	}
 		// join this room id
 		socket.join(data.CompanyId);
 		socket.companyId = data.CompanyId;

@@ -82,7 +82,7 @@ app.controller('reserveQueueControl', function($scope, socket,$location){
             socket.emit('request reserve seats', {'Name': $scope.customer.Name, 'NumberOfSeats': $scope.customer.NumberOfSeats, 'Id': Id});
             $scope.customer.Name = "";
             $scope.customer.NumberOfSeats = "";
-            $scope.qrCodeString = "{'CompanyId' : '" + $location.search().companyId+ "', 'Id': '"+Id+"'}";
+            $scope.qrCodeString = '{"CompanyId" : "' + $location.search().companyId+ '", "Id": "'+Id+'"}';
         }else{
             alert("Wrong Input Format: Name can not be empty and Number of Seats must be numeric");
         }        
