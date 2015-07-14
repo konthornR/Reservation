@@ -45,16 +45,13 @@
 
             <form novalidate class="pure-form pure-form-stacked">                       
 
-                        <label for="seats">Get Next Customer Info In This Seats Range</label>
-                        <select ng-model="dropDownSelected" convert-to-number>
-                          <option value="0">1-3</option>
-                          <option value="1">4-6</option>
-                          <option value="2">7-9</option>
-                          <option value="3">>10</option>
-                        </select>                        
-                        <br><br>
-                        <button class="pure-button pure-button-primary" ng-click="getNextQueue()">Get Next Customer</button>
-                        <br><br>
+                        <label for="seats">Get Next Customer</label>
+                        <br>
+                        <button class="pure-button pure-button-primary" ng-click="getNextQueue(0)">1-3</button>
+                        <button class="pure-button pure-button-primary" ng-click="getNextQueue(1)">4-6</button>
+                        <button class="pure-button pure-button-primary" ng-click="getNextQueue(2)">7-9</button>
+                        <button class="pure-button pure-button-primary" ng-click="getNextQueue(3)">>10</button>
+                        <br><br>                        
                         <label for="name">Name:</label>
                         <label>{{nextCustomer.Name}}</label>
                         <br>

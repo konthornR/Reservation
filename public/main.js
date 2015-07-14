@@ -46,13 +46,11 @@ app.controller('tableQueueControl', function($scope, socket,$location){
 
     $scope.selectCustomer = function(customer) {
         $scope.selectedCustomer = customer;
-        $scope.qrCodeString = "{'CompanyId' : '" + $location.search().companyId+ "', 'Id': '"+customer.Id+"'}";
+        $scope.qrCodeString = '{"CompanyId" : "' + $location.search().companyId+ '", "Id": "'+customer.Id+'"}';
     }
 
-    $scope.getNextQueue = function(){
-        if($scope.dropDownSelected){
-            socket.emit('request customer in next queue', {'customerType': $scope.dropDownSelected});
-        }
+    $scope.getNextQueue = function(index){
+        socket.emit('request customer in next queue', {'customerType': index});
     }
 
     socket.on('respond customer in next queue', function(data) {

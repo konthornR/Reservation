@@ -353,14 +353,13 @@ io.sockets.on('connection', function(socket){;
 	    	tableConfig = thisCompany.tableConfig;
 	    	allCustomers = thisCompany.allCustomers;
 	    	callingQueue = thisCompany.callingQueue;
-
-			if(data.customerType){
+			if(data.customerType != undefined && typeof data.customerType === "number"){
 				//Current this server have only 0,1,2,3 customer type
 				if(data.customerType > 3){
 					data.customerType = 3; 
 				}
 				if(tableConfig[data.customerType].customers.length > 0){
-					requestNextCustomer = tableConfig[data.customerType].customers[0]
+					requestNextCustomer = tableConfig[data.customerType].customers[0];
 					io.sockets.in(socket.companyId).emit('respond customer in next queue', requestNextCustomer);
 				}else{
 					io.sockets.in(socket.companyId).emit('respond customer in next queue', "no more customer waiting in this customer group type");
